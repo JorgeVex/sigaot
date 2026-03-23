@@ -1,7 +1,10 @@
 """
 ============================================================
-SIGAOT - Ventana principal (shell con sidebar)
+SIGAOT - Ventana principal (shell con sidebar) v2
 Archivo: vistas/vista_principal.py
+Cambios:
+  - Agrega módulo Personal al sidebar (índice 3)
+  - Sidebar con 4 ítems de navegación
 ============================================================
 """
 
@@ -11,19 +14,19 @@ from PyQt5.QtWidgets import (
     QLabel, QPushButton, QFrame, QSizePolicy, QStackedWidget,
     QSpacerItem,
 )
-from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QFont, QIcon
 
-from vistas.vista_inicio    import VistaInicio
-from vistas.vista_vehiculos import VistaVehiculos
+from vistas.vista_inicio     import VistaInicio
+from vistas.vista_vehiculos  import VistaVehiculos
 from vistas.vista_matriculas import VistaMatriculas
+from vistas.vista_personal   import VistaPersonal
 
 
 class VentanaPrincipal(QMainWindow):
     """
     Ventana principal de SIGAOT.
-    Contiene el sidebar de navegación y un QStackedWidget
-    para alternar entre los módulos.
+    Sidebar de navegación + QStackedWidget con los módulos.
     """
 
     def __init__(self, datos_usuario: dict):
@@ -31,14 +34,14 @@ class VentanaPrincipal(QMainWindow):
         self.datos_usuario = datos_usuario
         self._alerta_activa = False
         self._construir_ui()
-        self._navegar(0)           # Mostrar Inicio por defecto
+        self._navegar(0)
 
     # ── Construcción de la UI ────────────────────────────────
 
     def _construir_ui(self):
         self.setWindowTitle("SIGAOT – Trans-Alcayá")
-        self.setMinimumSize(960, 620)
-        self.resize(1100, 680)
+        self.setMinimumSize(980, 640)
+        self.resize(1140, 700)
 
         central = QWidget()
         self.setCentralWidget(central)
@@ -47,31 +50,32 @@ class VentanaPrincipal(QMainWindow):
         layout_raiz.setContentsMargins(0, 0, 0, 0)
         layout_raiz.setSpacing(0)
 
-        # ── Sidebar ─────────────────────────────────────────
+        # Sidebar
         self.sidebar = self._crear_sidebar()
         layout_raiz.addWidget(self.sidebar)
 
-        # ── Área de contenido (stacked) ──────────────────────
+        # Área de contenido
         self.stack = QStackedWidget()
         self.stack.setObjectName("contenido")
         layout_raiz.addWidget(self.stack, stretch=1)
 
-        # Crear módulos
+        # Módulos
         self.vista_inicio     = VistaInicio(self.datos_usuario)
         self.vista_vehiculos  = VistaVehiculos()
         self.vista_matriculas = VistaMatriculas()
+        self.vista_personal   = VistaPersonal()
 
-        self.stack.addWidget(self.vista_inicio)      # índice 0
-        self.stack.addWidget(self.vista_vehiculos)   # índice 1
-        self.stack.addWidget(self.vista_matriculas)  # índice 2
+        self.stack.addWidget(self.vista_inicio)      # 0
+        self.stack.addWidget(self.vista_vehiculos)   # 1
+        self.stack.addWidget(self.vista_matriculas)  # 2
+        self.stack.addWidget(self.vista_personal)    # 3
 
-        # Actualizar badge al cambiar a matrículas
+        # Badge de alerta de matrículas
         self.vista_matriculas.refrescar_badge.connect(
             self._actualizar_badge_alerta
         )
 
     def _crear_sidebar(self) -> QWidget:
-        """Construye el panel lateral de navegación."""
         sidebar = QWidget()
         sidebar.setObjectName("sidebar")
         sidebar.setFixedWidth(210)
@@ -80,7 +84,7 @@ class VentanaPrincipal(QMainWindow):
         layout.setContentsMargins(0, 16, 0, 16)
         layout.setSpacing(0)
 
-        # ── Logo ────────────────────────────────────────────
+        # Logo
         contenedor_logo = QWidget()
         lyt_logo = QVBoxLayout(contenedor_logo)
         lyt_logo.setContentsMargins(0, 0, 0, 4)
@@ -103,7 +107,7 @@ class VentanaPrincipal(QMainWindow):
         lyt_logo.addWidget(lbl_logo)
         layout.addWidget(contenedor_logo)
 
-        # ── Nombre de usuario ────────────────────────────────
+        # Bienvenido
         lbl_bienvenido = QLabel("Bienvenido")
         lbl_bienvenido.setObjectName("lbl_bienvenido")
         layout.addWidget(lbl_bienvenido)
@@ -112,7 +116,6 @@ class VentanaPrincipal(QMainWindow):
         lbl_usuario.setObjectName("lbl_usuario_sidebar")
         layout.addWidget(lbl_usuario)
 
-        # Separador
         sep = QFrame()
         sep.setObjectName("separador_sidebar")
         sep.setFrameShape(QFrame.HLine)
@@ -120,7 +123,7 @@ class VentanaPrincipal(QMainWindow):
 
         layout.addSpacing(8)
 
-        # ── Botones de navegación ────────────────────────────
+        # Botones de navegación
         self.btns_nav = []
 
         self._btn_inicio = self._crear_btn_nav("  🏠  Inicio", 0)
@@ -129,7 +132,7 @@ class VentanaPrincipal(QMainWindow):
         self._btn_vehiculos = self._crear_btn_nav("  🚗  Vehículos", 1)
         layout.addWidget(self._btn_vehiculos)
 
-        # Matrículas con badge de alerta
+        # Matrículas + badge
         contenedor_mat = QWidget()
         lyt_mat = QHBoxLayout(contenedor_mat)
         lyt_mat.setContentsMargins(0, 0, 8, 0)
@@ -144,32 +147,27 @@ class VentanaPrincipal(QMainWindow):
         self._badge.setFixedSize(18, 18)
         self._badge.setVisible(False)
         self._badge.setStyleSheet("""
-            background-color: #E74C3C;
-            color: white;
-            border-radius: 9px;
-            font-size: 10px;
-            font-weight: bold;
+            background-color: #E74C3C; color: white; border-radius: 9px;
+            font-size: 10px; font-weight: bold;
         """)
         lyt_mat.addWidget(self._badge)
         layout.addWidget(contenedor_mat)
 
-        # Empuje hacia abajo
+        # Personal
+        self._btn_personal = self._crear_btn_nav("  👥  Personal", 3)
+        layout.addWidget(self._btn_personal)
+
+        # Espacio y cerrar sesión
         layout.addSpacerItem(
             QSpacerItem(0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding)
         )
 
-        # Botón cerrar sesión
         btn_salir = QPushButton("  🚪  Cerrar sesión")
         btn_salir.setCursor(Qt.PointingHandCursor)
         btn_salir.setStyleSheet("""
-            background-color: transparent;
-            color: #A0A4B0;
-            border: none;
-            text-align: left;
-            padding: 10px 16px;
-            font-size: 13px;
-            margin: 2px 8px;
-            border-radius: 6px;
+            background-color: transparent; color: #A0A4B0;
+            border: none; text-align: left; padding: 10px 16px;
+            font-size: 13px; margin: 2px 8px; border-radius: 6px;
         """)
         btn_salir.clicked.connect(self.close)
         layout.addWidget(btn_salir)
@@ -177,10 +175,8 @@ class VentanaPrincipal(QMainWindow):
         return sidebar
 
     def _crear_btn_nav(self, texto: str, indice: int) -> QPushButton:
-        """Crea un botón de navegación del sidebar."""
         btn = QPushButton(texto)
         btn.setCursor(Qt.PointingHandCursor)
-        btn.setCheckable(False)
         btn.setProperty("activo", False)
         self.btns_nav.append((btn, indice))
         btn.clicked.connect(lambda _, i=indice: self._navegar(i))
@@ -189,30 +185,22 @@ class VentanaPrincipal(QMainWindow):
     # ── Navegación ───────────────────────────────────────────
 
     def _navegar(self, indice: int):
-        """Cambia el módulo visible y resalta el botón activo."""
         self.stack.setCurrentIndex(indice)
-
         for btn, idx in self.btns_nav:
             btn.setProperty("activo", idx == indice)
-            # Forzar actualización de estilo
             btn.style().unpolish(btn)
             btn.style().polish(btn)
 
-        # Al entrar a Matrículas, recargar datos
         if indice == 2:
             self.vista_matriculas.cargar_vehiculos()
-
-        # Al entrar a Vehículos, recargar lista
         if indice == 1:
             self.vista_vehiculos.cargar_lista()
 
-    # ── Badge de alerta ──────────────────────────────────────
+    # ── Badge ────────────────────────────────────────────────
 
     def _actualizar_badge_alerta(self, visible: bool):
-        """Muestra u oculta el badge rojo sobre 'Matrículas'."""
         self._alerta_activa = visible
         self._badge.setVisible(visible)
 
     def activar_alerta_matriculas(self):
-        """Llamado desde el controlador al iniciar sesión."""
         self._badge.setVisible(True)

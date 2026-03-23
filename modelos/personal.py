@@ -20,7 +20,7 @@ class ModeloPersonal:
         sql = """
             SELECT p.id_personal, p.nombre_completo, p.numero_id,
                    p.telefono, p.correo, p.ruta_imagen_cedula,
-                   r.nombre_rol, p.activo
+                   p.id_rol, r.nombre_rol, p.activo, p.fecha_registro
             FROM   personal p
             LEFT JOIN roles r ON r.id_rol = p.id_rol
             WHERE  p.activo = 1

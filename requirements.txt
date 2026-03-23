@@ -1,0 +1,5 @@
+# Dependencias del proyecto SIGAOT
+# Instalar con: pip install -r requirements.txt
+
+PyQt5>=5.15.0
+mysql-connector-python>=8.0.0

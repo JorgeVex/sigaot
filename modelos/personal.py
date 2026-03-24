@@ -20,7 +20,8 @@ class ModeloPersonal:
         sql = """
             SELECT p.id_personal, p.nombre_completo, p.numero_id,
                    p.telefono, p.correo, p.ruta_imagen_cedula,
-                   p.id_rol, r.nombre_rol, p.activo, p.fecha_registro
+                   p.id_rol, r.nombre_rol, p.activo, p.fecha_registro,
+                   p.fecha_nacimiento, p.tipo_sangre
             FROM   personal p
             LEFT JOIN roles r ON r.id_rol = p.id_rol
             WHERE  p.activo = 1
@@ -40,7 +41,7 @@ class ModeloPersonal:
     @staticmethod
     def crear(nombre_completo: str, numero_id: str,
               telefono: str, correo: str,
-              id_rol: int, ruta_imagen: str = None) -> int:
+              id_rol: int, ruta_imagen: str = None, fecha_nacimiento: str=None, tipo_sangre: str=None) -> int:
         """
         Inserta una persona nueva.
         Devuelve el id generado o -1 si falla.
@@ -48,14 +49,14 @@ class ModeloPersonal:
         sql = """
             INSERT INTO personal
                 (nombre_completo, numero_id, telefono,
-                 correo, id_rol, ruta_imagen_cedula)
-            VALUES (%s, %s, %s, %s, %s, %s)
+                 correo, id_rol, ruta_imagen_cedula, fecha_nacimiento, tipo_sangre)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """
         exito = bd.ejecutar(
             sql,
             (nombre_completo.strip(), numero_id.strip(),
              telefono.strip(), correo.strip(),
-             id_rol, ruta_imagen),
+             id_rol, ruta_imagen, fecha_nacimiento, tipo_sangre),
         )
         return bd.ultima_id() if exito else -1
 
@@ -65,7 +66,7 @@ class ModeloPersonal:
     def actualizar(id_personal: int, nombre_completo: str,
                    numero_id: str, telefono: str,
                    correo: str, id_rol: int,
-                   ruta_imagen: str = None) -> bool:
+                   ruta_imagen: str = None, fecha_nacimiento: str=None, tipo_sangre: str=None) -> bool:
         """Actualiza los datos de una persona."""
         sql = """
             UPDATE personal
@@ -74,7 +75,9 @@ class ModeloPersonal:
                    telefono          = %s,
                    correo            = %s,
                    id_rol            = %s,
-                   ruta_imagen_cedula = %s
+                   ruta_imagen_cedula = %s,
+                   fecha_nacimiento = %s,
+                   tipo_sangre = %s
             WHERE  id_personal = %s
         """
         return bd.ejecutar(

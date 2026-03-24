@@ -39,7 +39,7 @@ from controladores.controlador_login import ControladorLogin
 def cargar_estilos(app: QApplication) -> None:
     """Lee el archivo QSS y lo aplica a toda la aplicación."""
     ruta_qss = os.path.join(BASE_DIR, "recursos", "estilos", "estilo.qss")
-    if os.path.exists(ruta_qss):
+    if os.path.exists(ruta_qss):  
         with open(ruta_qss, "r", encoding="utf-8") as f:
             app.setStyleSheet(f.read())
     else:

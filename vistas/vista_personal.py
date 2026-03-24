@@ -19,9 +19,9 @@ from PyQt5.QtWidgets import (
     QTableWidget, QTableWidgetItem, QHeaderView, QMessageBox,
     QScrollArea, QSizePolicy, QAbstractItemView,
     QFormLayout, QGroupBox, QFileDialog, QCheckBox,
-    QSplitter,
+    QSplitter, QDateEdit 
 )
-from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtCore import QDate, Qt, pyqtSignal
 from PyQt5.QtGui import QFont, QPixmap
 
 from modelos.personal import ModeloPersonal
@@ -122,6 +122,16 @@ class FormularioPersonal(QWidget):
         self.inp_telefono = QLineEdit()
         self.inp_telefono.setPlaceholderText("Ej: 310 123 4567")
         self.inp_telefono.setFixedHeight(36)
+        
+        self.inp_fecha_nac = QDateEdit()
+        self.inp_fecha_nac.setCalendarPopup(True)  # Muestra calendario
+        self.inp_fecha_nac.setDate(QDate.currentDate())  # Fecha actual por defecto
+        self.inp_fecha_nac.setDisplayFormat("yyyy-MM-dd")
+        self.inp_fecha_nac.setFixedHeight(36)
+        
+        self.inp_tipo_sangre = QLineEdit()
+        self.inp_tipo_sangre.setPlaceholderText("Tipo de sangre (Ej: O+, A-, etc.)")
+        self.inp_tipo_sangre.setFixedHeight(36)
 
         self.inp_correo = QLineEdit()
         self.inp_correo.setPlaceholderText("correo@ejemplo.com")
@@ -135,6 +145,8 @@ class FormularioPersonal(QWidget):
         g_lyt.addRow("Identificación *:", self.inp_id)
         g_lyt.addRow("Teléfono:", self.inp_telefono)
         g_lyt.addRow("Correo:", self.inp_correo)
+        g_lyt.addRow("Fecha de nacimiento:", self.inp_fecha_nac)
+        g_lyt.addRow("Tipo de sangre:", self.inp_tipo_sangre)
         g_lyt.addRow("Rol:", self.cbo_rol)
         form_lyt.addWidget(grp_datos)
 
@@ -306,7 +318,14 @@ class FormularioPersonal(QWidget):
                     130, 90, Qt.KeepAspectRatio, Qt.SmoothTransformation
                 )
                 self.lbl_preview.setPixmap(pix)
+        # Fecha de nacimiento
+        if p.get("fecha_nacimiento"):
+            self.inp_fecha_nac.setDate(
+                QDate.fromString(str(p["fecha_nacimiento"]), "yyyy-MM-dd")
+            )
 
+        # Tipo de sangre
+        self.inp_tipo_sangre.setText(p.get("tipo_sangre", ""))
     # ── Guardar ──────────────────────────────────────────────
 
     def _guardar(self):
@@ -314,6 +333,8 @@ class FormularioPersonal(QWidget):
         numero_id = self.inp_id.text().strip()
         telefono  = self.inp_telefono.text().strip()
         correo    = self.inp_correo.text().strip()
+        fecha_nac = self.inp_fecha_nac.date().toString("yyyy-MM-dd")
+        tipo_sangre = self.inp_tipo_sangre.text().strip()
         id_rol    = self.cbo_rol.currentData()
 
         if not nombre or not numero_id:
@@ -335,7 +356,7 @@ class FormularioPersonal(QWidget):
         if self.id_personal is None:
             id_nuevo = ModeloPersonal.crear(
                 nombre, numero_id, telefono, correo,
-                id_rol, ruta_guardada
+                id_rol, ruta_guardada, fecha_nac, tipo_sangre
             )
             if id_nuevo == -1:
                 self.lbl_msg.setText(
@@ -361,7 +382,8 @@ class FormularioPersonal(QWidget):
         else:
             ok = ModeloPersonal.actualizar(
                 self.id_personal, nombre, numero_id,
-                telefono, correo, id_rol, ruta_guardada
+                telefono, correo, id_rol, ruta_guardada,
+                fecha_nac, tipo_sangre
             )
             if not ok:
                 self.lbl_msg.setText("⚠  Error al actualizar el registro.")
@@ -442,6 +464,9 @@ class PanelDetalle(QFrame):
             ("id_doc",   "📋  Identificación"),
             ("telefono", "📞  Teléfono"),
             ("correo",   "✉   Correo electrónico"),
+            ("fecha_nacimiento", "📅  Fecha de nacimiento"),
+            ("tipo_sangre", "🩸  Tipo de sangre"),
+            ("rol", "🎭  Rol asignado"),
             ("registro", "📅  Fecha de registro"),
         ]
         for clave, etiqueta in filas:
@@ -497,9 +522,17 @@ class PanelDetalle(QFrame):
         else:
             fecha_str = str(fecha_reg)[:10] if fecha_reg else "—"
 
+        fecha_nac = datos.get("fecha_nacimiento")
+
+        if hasattr(fecha_nac, "strftime"):
+            fecha_nac = fecha_nac.strftime("%d/%m/%Y")
+
         self.campos["id_doc"].setText(datos.get("numero_id", "—"))
         self.campos["telefono"].setText(datos.get("telefono") or "—")
         self.campos["correo"].setText(datos.get("correo") or "—")
+        self.campos["fecha_nacimiento"].setText(fecha_nac)
+        self.campos["tipo_sangre"].setText(datos.get("tipo_sangre", "—"))
+        self.campos["rol"].setText(datos.get("nombre_rol") or "—")
         self.campos["registro"].setText(fecha_str)
         self.btn_editar.setVisible(True)
 

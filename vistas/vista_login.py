@@ -38,7 +38,7 @@ class VistaLogin(QWidget):
         self.setObjectName("ventana_login")
 
         # Fondo gris oscuro igual que el sidebar
-        self.setStyleSheet("background-color: #FFFFFF;")
+        self.setStyleSheet("background-color: #F4F5F7;")
 
         # Layout raíz con padding
         raiz = QVBoxLayout(self)
@@ -60,11 +60,11 @@ class VistaLogin(QWidget):
         lbl_logo = QLabel()
         lbl_logo.setAlignment(Qt.AlignCenter)
         ruta_logo = os.path.join(
-            os.path.dirname(__file__), "..", "recursos", "IMG", "logo.png"
+            os.path.dirname(__file__), "..", "recursos", "IMG", "Transalcaya.png"
         )
         if os.path.exists(ruta_logo):
             pix = QPixmap(ruta_logo).scaled(
-                110, 110,
+                140, 140,
                 Qt.KeepAspectRatio,
                 Qt.SmoothTransformation,
             )
@@ -134,7 +134,7 @@ class VistaLogin(QWidget):
         # Pie de página
         lbl_pie = QLabel("© 2025 Trans-Alcayá – Todos los derechos reservados")
         lbl_pie.setAlignment(Qt.AlignCenter)
-        lbl_pie.setStyleSheet("color: #5A5E6A; font-size: 11px; margin-top: 16px;")
+        lbl_pie.setStyleSheet("color: #9099A8; font-size: 11px; margin-top: 16px;")
         raiz.addWidget(lbl_pie)
 
         # ── Conexiones internas ─────────────────────────────

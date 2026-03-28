@@ -1,29 +1,31 @@
 /* ============================================================
    SIGAOT - Hoja de estilos global (QSS)
-   Paleta: amarillo Trans-Alcayá + gris oscuro + blanco limpio
+   Paleta corporativa Trans-Alcayá
+   Amarillo principal : #FEBC3D
+   Amarillo hover     : #E5A52E
+   Amarillo pressed   : #C98E1A
+   Rojo corporativo   : #8B1A1A  (estrella del logo)
+   Rojo hover         : #A52020
+   Sidebar            : #1A1C23
+   Sidebar hover      : #22252E
+   Fondo app          : #F4F5F7
+   Texto principal    : #1A1C23
+   Texto secundario   : #4A5060
+   Texto muted        : #6B7080
+   Borde suave        : #E0E3E8
    ============================================================ */
-
-/* ── Variables de color (referencia en comentarios) ─────────
-   Amarillo primario : #F5C400
-   Amarillo hover    : #D4A900
-   Fondo sidebar     : #1E2027
-   Fondo principal   : #F4F5F7
-   Texto oscuro      : #1E2027
-   Texto claro       : #FFFFFF
-   Borde suave       : #E0E3E8
-   ──────────────────────────────────────────────────────── */
 
 /* ── Ventana principal ────────────────────────────────────── */
 QMainWindow, QDialog {
     background-color: #F4F5F7;
     font-family: "Segoe UI", "Arial", sans-serif;
     font-size: 13px;
-    color: #1E2027;
+    color: #1A1C23;
 }
 
 /* ── Sidebar ──────────────────────────────────────────────── */
 #sidebar {
-    background-color: #1E2027;
+    background-color: #1A1C23;
     min-width: 200px;
     max-width: 200px;
 }
@@ -36,30 +38,28 @@ QMainWindow, QDialog {
 }
 
 #lbl_usuario_sidebar {
-    color: #A0A4B0;
+    color: #7A7D8A;
     font-size: 11px;
     padding: 0px 16px 12px 16px;
 }
 
-/* Logo en sidebar */
 #sidebar QLabel#lbl_logo_sidebar {
     padding: 20px 0px 10px 0px;
 }
 
-/* Separador en sidebar */
 #sidebar QFrame#separador_sidebar {
-    color: #383C4A;
-    background-color: #383C4A;
+    color: #2E3040;
+    background-color: #2E3040;
     max-height: 1px;
     margin: 4px 16px;
 }
 
-/* Botones de navegación del sidebar */
+/* Botones de navegación */
 #sidebar QPushButton {
     background-color: transparent;
-    color: #C0C4D0;
+    color: #A0A4B0;
     border: none;
-    border-radius: 6px;
+    border-radius: 7px;
     text-align: left;
     padding: 10px 16px;
     font-size: 13px;
@@ -67,24 +67,24 @@ QMainWindow, QDialog {
 }
 
 #sidebar QPushButton:hover {
-    background-color: #2E3240;
+    background-color: #22252E;
     color: #FFFFFF;
 }
 
 #sidebar QPushButton[activo="true"] {
-    background-color: #F5C400;
-    color: #1E2027;
+    background-color: #FEBC3D;
+    color: #1A1C23;
     font-weight: bold;
 }
 
 #sidebar QPushButton[activo="true"]:hover {
-    background-color: #D4A900;
+    background-color: #E5A52E;
 }
 
-/* Badge de alerta en botón de Matrículas */
+/* Badge de alerta — rojo corporativo */
 #badge_alerta {
-    background-color: #E74C3C;
-    color: white;
+    background-color: #8B1A1A;
+    color: #FFFFFF;
     border-radius: 9px;
     min-width: 18px;
     max-width: 18px;
@@ -104,7 +104,7 @@ QMainWindow, QDialog {
 #titulo_modulo {
     font-size: 24px;
     font-weight: bold;
-    color: #1E2027;
+    color: #1A1C23;
     padding-bottom: 4px;
 }
 
@@ -114,96 +114,104 @@ QMainWindow, QDialog {
     padding-bottom: 16px;
 }
 
-/* ── Tarjetas (cards) ─────────────────────────────────────── */
+/* ── Cards ────────────────────────────────────────────────── */
 #card {
     background-color: #FFFFFF;
-    border: 1px solid #E0E3E8;
+    border: 1.5px solid #E0E3E8;
     border-radius: 10px;
     padding: 16px;
 }
 
 #card:hover {
-    border-color: #F5C400;
+    border-color: #FEBC3D;
 }
 
-/* ── Botones principales ──────────────────────────────────── */
+/* ── Botón primario ───────────────────────────────────────── */
 QPushButton#btn_primario {
-    background-color: #F5C400;
-    color: #1E2027;
+    background-color: #FEBC3D;
+    color: #1A1C23;
     border: none;
-    border-radius: 6px;
+    border-radius: 7px;
     padding: 8px 20px;
     font-weight: bold;
     font-size: 13px;
 }
 
 QPushButton#btn_primario:hover {
-    background-color: #D4A900;
+    background-color: #E5A52E;
 }
 
 QPushButton#btn_primario:pressed {
-    background-color: #B89200;
+    background-color: #C98E1A;
 }
 
-/* Botón secundario (contorno) */
+/* ── Botón secundario ─────────────────────────────────────── */
 QPushButton#btn_secundario {
     background-color: transparent;
-    color: #1E2027;
+    color: #1A1C23;
     border: 1.5px solid #C0C4D0;
-    border-radius: 6px;
+    border-radius: 7px;
     padding: 8px 20px;
     font-size: 13px;
 }
 
 QPushButton#btn_secundario:hover {
-    border-color: #F5C400;
-    color: #1E2027;
-    background-color: #FFFBEA;
+    border-color: #FEBC3D;
+    background-color: #FFF8E6;
+    color: #1A1C23;
 }
 
-/* Botón peligro (rojo) */
+QPushButton#btn_secundario:pressed {
+    background-color: #FFECC4;
+}
+
+/* ── Botón peligro — rojo corporativo ─────────────────────── */
 QPushButton#btn_peligro {
-    background-color: #E74C3C;
+    background-color: #8B1A1A;
     color: #FFFFFF;
     border: none;
-    border-radius: 6px;
+    border-radius: 7px;
     padding: 8px 20px;
     font-weight: bold;
 }
 
 QPushButton#btn_peligro:hover {
-    background-color: #C0392B;
+    background-color: #A52020;
 }
 
-/* Botón éxito (verde) */
+QPushButton#btn_peligro:pressed {
+    background-color: #6E1414;
+}
+
+/* ── Botón éxito ──────────────────────────────────────────── */
 QPushButton#btn_exito {
-    background-color: #27AE60;
+    background-color: #1E7E4A;
     color: #FFFFFF;
     border: none;
-    border-radius: 6px;
+    border-radius: 7px;
     padding: 8px 20px;
     font-weight: bold;
 }
 
 QPushButton#btn_exito:hover {
-    background-color: #1E8449;
+    background-color: #27AE60;
 }
 
-/* ── Inputs de texto ──────────────────────────────────────── */
+/* ── Inputs ───────────────────────────────────────────────── */
 QLineEdit, QComboBox, QDateEdit {
     background-color: #FFFFFF;
     border: 1.5px solid #D0D3DC;
-    border-radius: 6px;
+    border-radius: 7px;
     padding: 7px 10px;
-    color: #1E2027;
+    color: #1A1C23;
     font-size: 13px;
-    selection-background-color: #F5C400;
-    selection-color: #1E2027;
+    selection-background-color: #FEBC3D;
+    selection-color: #1A1C23;
 }
 
 QLineEdit:focus, QComboBox:focus, QDateEdit:focus {
-    border-color: #F5C400;
-    background-color: #FFFDF0;
+    border-color: #FEBC3D;
+    background-color: #FFFCF0;
 }
 
 QLineEdit:disabled, QComboBox:disabled, QDateEdit:disabled {
@@ -223,19 +231,18 @@ QComboBox::down-arrow {
 
 QComboBox QAbstractItemView {
     background-color: #FFFFFF;
-    border: 1px solid #D0D3DC;
-    border-radius: 4px;
-    selection-background-color: #F5C400;
-    selection-color: #1E2027;
+    border: 1.5px solid #D0D3DC;
+    border-radius: 6px;
+    selection-background-color: #FEBC3D;
+    selection-color: #1A1C23;
 }
 
-/* DateEdit: botón de calendario */
 QDateEdit::drop-down {
     border: none;
     width: 24px;
 }
 
-/* ── Etiquetas de campo ───────────────────────────────────── */
+/* ── Label de campo ───────────────────────────────────────── */
 QLabel#lbl_campo {
     color: #4A5060;
     font-size: 12px;
@@ -243,14 +250,14 @@ QLabel#lbl_campo {
     padding-bottom: 2px;
 }
 
-/* ── Tabla de vehículos ───────────────────────────────────── */
+/* ── Tabla ────────────────────────────────────────────────── */
 QTableWidget {
     background-color: #FFFFFF;
     border: 1px solid #E0E3E8;
     border-radius: 8px;
     gridline-color: #F0F1F4;
-    selection-background-color: #FFFBEA;
-    selection-color: #1E2027;
+    selection-background-color: #FFF8E6;
+    selection-color: #1A1C23;
     font-size: 13px;
 }
 
@@ -259,8 +266,8 @@ QTableWidget::item {
 }
 
 QTableWidget::item:selected {
-    background-color: #FFF8D6;
-    color: #1E2027;
+    background-color: #FFF3CC;
+    color: #1A1C23;
 }
 
 QHeaderView::section {
@@ -269,10 +276,10 @@ QHeaderView::section {
     font-weight: bold;
     padding: 8px;
     border: none;
-    border-bottom: 2px solid #E0E3E8;
+    border-bottom: 2px solid #FEBC3D;
 }
 
-/* ── Lista de vehículos (sidebar módulo matrículas) ───────── */
+/* ── Lista (módulo matrículas) ────────────────────────────── */
 QListWidget {
     background-color: #FFFFFF;
     border: 1px solid #E0E3E8;
@@ -285,111 +292,35 @@ QListWidget::item {
     padding: 10px 12px;
     border-radius: 6px;
     margin: 2px 4px;
-    color: #1E2027;
+    color: #1A1C23;
 }
 
 QListWidget::item:hover {
-    background-color: #FFFBEA;
+    background-color: #FFF8E6;
 }
 
 QListWidget::item:selected {
-    background-color: #F5C400;
-    color: #1E2027;
+    background-color: #FEBC3D;
+    color: #1A1C23;
     font-weight: bold;
 }
 
-/* ── Tarjetas de matrícula (colores de estado) ────────────── */
-
-/* Normal: más de 60 días */
-#card_matricula_normal {
-    background-color: #FFFFFF;
-    border: 1.5px solid #E0E3E8;
-    border-radius: 10px;
-    padding: 14px;
-}
-
-/* Próxima: 31-60 días */
-#card_matricula_proxima {
-    background-color: #EAF9F0;
-    border: 1.5px solid #A8DFB5;
-    border-radius: 10px;
-    padding: 14px;
-}
-
-/* Advertencia: 15-30 días */
-#card_matricula_advertencia {
-    background-color: #FFF8D6;
-    border: 1.5px solid #F5C400;
-    border-radius: 10px;
-    padding: 14px;
-}
-
-/* Urgente: 7-14 días */
-#card_matricula_urgente {
-    background-color: #FFE8CC;
-    border: 1.5px solid #F5A623;
-    border-radius: 10px;
-    padding: 14px;
-}
-
-/* Crítica: < 7 días */
-#card_matricula_critica {
-    background-color: #FFDDDD;
-    border: 1.5px solid #E74C3C;
-    border-radius: 10px;
-    padding: 14px;
-}
-
-/* Vencida: ya venció */
-#card_matricula_vencida {
-    background-color: #F0D0D0;
-    border: 2px solid #C0392B;
-    border-radius: 10px;
-    padding: 14px;
-}
-
-/* Sin fecha */
-#card_matricula_sin_fecha {
-    background-color: #F4F5F7;
-    border: 1.5px dashed #C0C4D0;
-    border-radius: 10px;
-    padding: 14px;
-}
-
-/* ── Labels dentro de tarjetas de matrícula ───────────────── */
-#lbl_nombre_matricula {
-    font-size: 14px;
-    font-weight: bold;
-    color: #1E2027;
-}
-
-#lbl_vence_titulo {
-    font-size: 11px;
-    color: #6B7080;
-}
-
-#lbl_fecha_matricula {
-    font-size: 13px;
-    color: #1E2027;
-    font-weight: bold;
-}
-
-#lbl_dias_matricula {
-    font-size: 11px;
-    color: #6B7080;
-}
-
-/* ── Barra de título en login ─────────────────────────────── */
+/* ── Panel login ──────────────────────────────────────────── */
 #panel_login {
     background-color: #FFFFFF;
-    border-radius: 12px;
-    border: 1px solid #E0E3E8;
+    border-radius: 14px;
+    border: 1.5px solid #E0E3E8;
+}
+
+/* Ventana de login — fondo claro */
+#ventana_login {
+    background-color: #F4F5F7;
 }
 
 /* ── ScrollBar ────────────────────────────────────────────── */
 QScrollBar:vertical {
     background: #F4F5F7;
-    width: 8px;
+    width: 7px;
     border-radius: 4px;
 }
 
@@ -400,7 +331,7 @@ QScrollBar::handle:vertical {
 }
 
 QScrollBar::handle:vertical:hover {
-    background: #F5C400;
+    background: #FEBC3D;
 }
 
 QScrollBar::add-line:vertical,
@@ -408,30 +339,80 @@ QScrollBar::sub-line:vertical {
     height: 0;
 }
 
-/* ── Mensajes de error / éxito en formularios ─────────────── */
+/* ── Mensajes de estado ───────────────────────────────────── */
 #lbl_error {
-    color: #E74C3C;
+    color: #8B1A1A;
     font-size: 12px;
 }
 
 #lbl_exito {
-    color: #27AE60;
+    color: #1E7E4A;
     font-size: 12px;
 }
 
-/* ── Separadores horizontales ─────────────────────────────── */
-QFrame[frameShape="4"] {   /* HLine */
+/* ── Separadores ──────────────────────────────────────────── */
+QFrame[frameShape="4"] {
     background-color: #E0E3E8;
     max-height: 1px;
     border: none;
 }
 
-/* ── Tooltip ─────────────────────────────────────────────── */
+/* ── Tooltip ──────────────────────────────────────────────── */
 QToolTip {
-    background-color: #1E2027;
+    background-color: #1A1C23;
     color: #FFFFFF;
     border: none;
-    border-radius: 4px;
-    padding: 4px 8px;
+    border-radius: 5px;
+    padding: 5px 10px;
     font-size: 12px;
+}
+
+/* ── CheckBox ─────────────────────────────────────────────── */
+QCheckBox {
+    color: #1A1C23;
+    font-size: 13px;
+    spacing: 8px;
+}
+
+QCheckBox::indicator {
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid #C0C4D0;
+    border-radius: 4px;
+    background: #FFFFFF;
+}
+
+QCheckBox::indicator:checked {
+    background-color: #FEBC3D;
+    border-color: #FEBC3D;
+}
+
+QCheckBox::indicator:hover {
+    border-color: #FEBC3D;
+}
+
+/* ── GroupBox ─────────────────────────────────────────────── */
+QGroupBox {
+    font-weight: bold;
+    font-size: 13px;
+    border: 1.5px solid #E0E3E8;
+    border-radius: 8px;
+    margin-top: 8px;
+    padding-top: 12px;
+    background: #FFFFFF;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 12px;
+    color: #4A5060;
+}
+
+/* ── Splitter ─────────────────────────────────────────────── */
+QSplitter::handle {
+    background: #E0E3E8;
+}
+
+QSplitter::handle:hover {
+    background: #FEBC3D;
 }

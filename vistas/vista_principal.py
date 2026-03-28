@@ -94,7 +94,7 @@ class VentanaPrincipal(QMainWindow):
         lbl_logo.setObjectName("lbl_logo_sidebar")
         lbl_logo.setAlignment(Qt.AlignCenter)
         ruta = os.path.join(
-            os.path.dirname(__file__), "..", "recursos", "IMG", "logo.png"
+            os.path.dirname(__file__), "..", "recursos", "IMG", "Transalcaya.png"
         )
         if os.path.exists(ruta):
             pix = QPixmap(ruta).scaled(

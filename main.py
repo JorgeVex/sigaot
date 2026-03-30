@@ -27,7 +27,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 if BASE_DIR not in sys.path:
     sys.path.insert(0, BASE_DIR)
 
-from PyQt5.QtWidgets import QApplication, QMessageBox
+from PyQt5.QtWidgets import QApplication, QMessageBox, QComboBox
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import Qt
 
@@ -36,10 +36,90 @@ from vistas.vista_login  import VistaLogin
 from controladores.controlador_login import ControladorLogin
 
 
+ESTILO_COMBO_VIEW = """
+    QAbstractItemView {
+        background-color: #FFFFFF;
+        color: #1A1C23;
+        border: 1.5px solid #D0D3DC;
+        outline: 0px;
+        padding: 2px;
+    }
+    QAbstractItemView::item {
+        background-color: #FFFFFF;
+        color: #1A1C23;
+        padding: 8px 12px;
+        min-height: 30px;
+        border: none;
+    }
+    QAbstractItemView::item:hover,
+    QAbstractItemView::item:focus {
+        background-color: #FFF8E6;
+        color: #1A1C23;
+    }
+    QAbstractItemView::item:selected {
+        background-color: #FEBC3D;
+        color: #1A1C23;
+        font-weight: bold;
+    }
+"""
+
+
+def parchar_combos(widget) -> None:
+    """
+    Recorre recursivamente todos los QComboBox de la app
+    y aplica el estilo correcto a su vista (dropdown).
+    Esto soluciona el fondo negro en Windows que ignora el QSS global.
+    """
+    for combo in widget.findChildren(QComboBox):
+        combo.view().setStyleSheet(ESTILO_COMBO_VIEW)
+        combo.view().window().setWindowFlags(
+            combo.view().window().windowFlags() | Qt.ToolTip
+        )
+
+
+ESTILO_COMBO_VIEW = """
+    QAbstractItemView {
+        background-color: #FFFFFF;
+        color: #1A1C23;
+        border: 1.5px solid #D0D3DC;
+        outline: 0px;
+        padding: 2px;
+    }
+    QAbstractItemView::item {
+        background-color: #FFFFFF;
+        color: #1A1C23;
+        padding: 8px 12px;
+        min-height: 30px;
+        border: none;
+    }
+    QAbstractItemView::item:hover,
+    QAbstractItemView::item:focus {
+        background-color: #FFF8E6;
+        color: #1A1C23;
+    }
+    QAbstractItemView::item:selected {
+        background-color: #FEBC3D;
+        color: #1A1C23;
+        font-weight: bold;
+    }
+"""
+
+
+def parchar_combos(widget) -> None:
+    """
+    Aplica el estilo correcto a la view() de todos los QComboBox
+    que encuentre en `widget`. Soluciona el fondo negro en Windows
+    que no respeta el QSS global.
+    """
+    from PyQt5.QtWidgets import QComboBox
+    for combo in widget.findChildren(QComboBox):
+        combo.view().setStyleSheet(ESTILO_COMBO_VIEW)
+
+
 def cargar_estilos(app: QApplication) -> None:
     """Lee el archivo QSS y lo aplica a toda la aplicación."""
     ruta_qss = os.path.join(BASE_DIR, "recursos", "estilos", "estilo.qss")
-    if os.path.exists(ruta_qss):  
+    if os.path.exists(ruta_qss):
         with open(ruta_qss, "r", encoding="utf-8") as f:
             app.setStyleSheet(f.read())
     else:

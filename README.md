@@ -40,13 +40,13 @@ SIGAOT/
 │
 ├── recursos/
 │   ├── estilos/
-│   │   └── estilo.qss             
-│   └── IMG/                       
-│       ├── logo.png             
-│       └── user.png             
+│   │   └── estilo.qss             ← Hoja de estilos global
+│   └── IMG/                       ← ⚠ AQUÍ DEBES PONER TUS IMÁGENES
+│       ├── logo.png               (logo circular Trans-Alcayá)
+│       └── user.png               (icono de usuario genérico)
 │
 └── SQL/
-    └── sigaot_bd.sql            
+    └── sigaot_bd.sql              ← Script completo de la BD
 ```
 
 ---

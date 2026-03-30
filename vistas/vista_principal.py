@@ -70,9 +70,17 @@ class VentanaPrincipal(QMainWindow):
         self.stack.addWidget(self.vista_matriculas)  # 2
         self.stack.addWidget(self.vista_personal)    # 3
 
+        # Parchar combos: forzar fondo blanco en dropdowns (fix Windows)
+        from PyQt5.QtCore import QTimer
+        QTimer.singleShot(200, self._parchar_todos_los_combos)
+
         # Badge de alerta de matrículas
         self.vista_matriculas.refrescar_badge.connect(
             self._actualizar_badge_alerta
+        )
+        # Badge de cumpleaños de personal
+        self.vista_personal.refrescar_badge_personal.connect(
+            self._actualizar_badge_personal
         )
 
     def _crear_sidebar(self) -> QWidget:
@@ -93,12 +101,19 @@ class VentanaPrincipal(QMainWindow):
         lbl_logo = QLabel()
         lbl_logo.setObjectName("lbl_logo_sidebar")
         lbl_logo.setAlignment(Qt.AlignCenter)
+        lbl_logo.setFixedSize(110, 110)
+        # Fondo circular amarillo corporativo para integrar el logo con el sidebar
+        lbl_logo.setStyleSheet("""
+            background-color: #FEBC3D;
+            border-radius: 55px;
+            padding: 6px;
+        """)
         ruta = os.path.join(
             os.path.dirname(__file__), "..", "recursos", "IMG", "Transalcaya.png"
         )
         if os.path.exists(ruta):
             pix = QPixmap(ruta).scaled(
-                80, 80, Qt.KeepAspectRatio, Qt.SmoothTransformation
+                96, 96, Qt.KeepAspectRatio, Qt.SmoothTransformation
             )
             lbl_logo.setPixmap(pix)
         else:
@@ -153,9 +168,23 @@ class VentanaPrincipal(QMainWindow):
         lyt_mat.addWidget(self._badge)
         layout.addWidget(contenedor_mat)
 
-        # Personal
+        # Personal + badge cumpleaños
+        contenedor_per = QWidget()
+        lyt_per = QHBoxLayout(contenedor_per)
+        lyt_per.setContentsMargins(0, 0, 8, 0)
+        lyt_per.setSpacing(0)
         self._btn_personal = self._crear_btn_nav("  👥  Personal", 3)
-        layout.addWidget(self._btn_personal)
+        lyt_per.addWidget(self._btn_personal, stretch=1)
+        self._badge_personal = QLabel("🎂")
+        self._badge_personal.setAlignment(Qt.AlignCenter)
+        self._badge_personal.setFixedSize(22, 22)
+        self._badge_personal.setVisible(False)
+        self._badge_personal.setStyleSheet("""
+            background-color: #FEBC3D; color: #1A1C23;
+            border-radius: 11px; font-size: 11px; font-weight: bold;
+        """)
+        lyt_per.addWidget(self._badge_personal)
+        layout.addWidget(contenedor_per)
 
         # Espacio y cerrar sesión
         layout.addSpacerItem(
@@ -204,3 +233,35 @@ class VentanaPrincipal(QMainWindow):
 
     def activar_alerta_matriculas(self):
         self._badge.setVisible(True)
+
+    def _actualizar_badge_personal(self, visible: bool):
+        """Muestra u oculta el badge de cumpleaños en Personal."""
+        self._badge_personal.setVisible(visible)
+
+    def _parchar_todos_los_combos(self):
+        """Aplica fondo blanco a todos los QComboBox de la ventana (fix Windows)."""
+        from PyQt5.QtWidgets import QComboBox
+        estilo = """
+            QAbstractItemView {
+                background-color: #FFFFFF; color: #1A1C23;
+                border: 1.5px solid #D0D3DC; outline: 0px; padding: 2px;
+            }
+            QAbstractItemView::item {
+                background-color: #FFFFFF; color: #1A1C23;
+                padding: 8px 12px; min-height: 30px; border: none;
+            }
+            QAbstractItemView::item:hover {
+                background-color: #FFF8E6; color: #1A1C23;
+            }
+            QAbstractItemView::item:selected {
+                background-color: #FEBC3D; color: #1A1C23; font-weight: bold;
+            }
+        """
+        for combo in self.findChildren(QComboBox):
+            combo.view().setStyleSheet(estilo)
+
+    def verificar_alertas_iniciales(self):
+        """Verifica badges al iniciar sesión."""
+        from modelos.personal import ModeloPersonal
+        hay_cumple = ModeloPersonal.hay_cumpleanos_proximos(5)
+        self._badge_personal.setVisible(hay_cumple)

@@ -223,6 +223,49 @@ class FormularioVehiculo(QWidget):
                     qd = QDate(int(p[0]), int(p[1]), int(p[2]))
                 self.date_inputs[tipo].setDate(qd)
 
+
+
+    def _parchar_date_edits(self):
+        """Pone el ícono 📅 en el botón de todos los QDateEdit del formulario."""
+        from PyQt5.QtWidgets import QDateEdit, QToolButton
+        for de in self.findChildren(QDateEdit):
+            de.setButtonSymbols(de.NoButtons)   # oculta flechas up/down nativas
+            # El botón del calendario es el drop-down
+            btn = de.findChild(QToolButton)
+            if btn:
+                btn.setText("📅")
+                btn.setStyleSheet("""
+                    QToolButton {
+                        font-size: 14px;
+                        border: none;
+                        border-left: 1.5px solid #E0E3E8;
+                        border-radius: 0px 7px 7px 0px;
+                        background: #F4F5F7;
+                        padding: 0px 6px;
+                        color: #1A1C23;
+                    }
+                    QToolButton:hover {
+                        background: #FEBC3D;
+                    }
+                """)
+
+    def showEvent(self, event):
+        """Parchar combos al mostrar el formulario (fix fondo negro Windows)."""
+        super().showEvent(event)
+        self._parchar_date_edits()
+        from PyQt5.QtWidgets import QComboBox
+        estilo = (
+            "QAbstractItemView{background:#FFFFFF;color:#1A1C23;"
+            "border:1.5px solid #D0D3DC;outline:0;padding:2px;}"
+            "QAbstractItemView::item{background:#FFFFFF;color:#1A1C23;"
+            "padding:8px 12px;min-height:30px;border:none;}"
+            "QAbstractItemView::item:hover{background:#FFF8E6;color:#1A1C23;}"
+            "QAbstractItemView::item:selected{background:#FEBC3D;"
+            "color:#1A1C23;font-weight:bold;}"
+        )
+        for combo in self.findChildren(QComboBox):
+            combo.view().setStyleSheet(estilo)
+
     def _guardar(self):
         placa       = self.inp_placa.text().strip().upper()
         propietario = self.inp_propietario.text().strip()
@@ -330,20 +373,26 @@ class ListaVehiculos(QWidget):
         self.tabla.setStyleSheet(
             "QTableWidget { alternate-background-color: #F9FAFC; }"
         )
+        self.tabla.horizontalHeader().setDefaultAlignment(Qt.AlignCenter)
         layout.addWidget(self.tabla)
 
     def actualizar(self):
         vehiculos = ModeloVehiculo.listar_todos()
         self.tabla.setRowCount(len(vehiculos))
 
+        CENTRO = Qt.AlignCenter
+
         for fila, v in enumerate(vehiculos):
-            self.tabla.setItem(fila, 0, QTableWidgetItem(v["placa"]))
-            self.tabla.setItem(fila, 1, QTableWidgetItem(v["propietario"]))
-            self.tabla.setItem(fila, 2, QTableWidgetItem(v["conductor"]))
-            self.tabla.setItem(fila, 3, QTableWidgetItem(v["tipo_vehiculo"]))
+            for col, valor in enumerate([
+                v["placa"], v["propietario"], v["conductor"], v["tipo_vehiculo"]
+            ]):
+                it = QTableWidgetItem(valor)
+                it.setTextAlignment(CENTRO)
+                self.tabla.setItem(fila, col, it)
 
             estado = "Habilitado" if v["habilitado"] else "Inhabilitado"
             it_est = QTableWidgetItem(estado)
+            it_est.setTextAlignment(CENTRO)
             it_est.setForeground(
                 QColor("#27AE60") if v["habilitado"] else QColor("#E74C3C")
             )
@@ -352,7 +401,7 @@ class ListaVehiculos(QWidget):
             # Acciones
             w_acc = QWidget()
             lyt_a = QHBoxLayout(w_acc)
-            lyt_a.setContentsMargins(4, 2, 4, 2)
+            lyt_a.setContentsMargins(6, 6, 6, 6)
             lyt_a.setSpacing(6)
 
             id_v  = v["id_vehiculo"]
@@ -360,7 +409,7 @@ class ListaVehiculos(QWidget):
 
             btn_ed = QPushButton("Editar")
             btn_ed.setObjectName("btn_secundario")
-            btn_ed.setFixedHeight(28)
+            btn_ed.setFixedHeight(34)
             btn_ed.setCursor(Qt.PointingHandCursor)
             btn_ed.clicked.connect(lambda _, i=id_v: self.solicitar_editar.emit(i))
             lyt_a.addWidget(btn_ed)
@@ -368,7 +417,7 @@ class ListaVehiculos(QWidget):
             if v["habilitado"]:
                 btn_inh = QPushButton("Inhabilitar")
                 btn_inh.setObjectName("btn_peligro")
-                btn_inh.setFixedHeight(28)
+                btn_inh.setFixedHeight(34)
                 btn_inh.setCursor(Qt.PointingHandCursor)
                 btn_inh.clicked.connect(
                     lambda _, i=id_v, p=placa:
@@ -378,13 +427,13 @@ class ListaVehiculos(QWidget):
             else:
                 btn_hab = QPushButton("Habilitar")
                 btn_hab.setObjectName("btn_exito")
-                btn_hab.setFixedHeight(28)
+                btn_hab.setFixedHeight(34)
                 btn_hab.setCursor(Qt.PointingHandCursor)
                 btn_hab.clicked.connect(lambda _, i=id_v: self._habilitar(i))
                 lyt_a.addWidget(btn_hab)
 
             self.tabla.setCellWidget(fila, 5, w_acc)
-            self.tabla.setRowHeight(fila, 44)
+            self.tabla.setRowHeight(fila, 68)
 
     def _habilitar(self, id_vehiculo: int):
         if QMessageBox.question(

@@ -119,14 +119,6 @@ class VistaInicio(QWidget):
         lbl_logo.setAlignment(Qt.AlignRight)
         contenedor_logo.addWidget(lbl_logo)
 
-        lbl_empresa = QLabel("TRANS - ALCAYÁ")
-        lbl_empresa.setStyleSheet(
-            "font-size: 14px; font-weight: bold; "
-            "color: #1E2027; letter-spacing: 2px;"
-        )
-        lbl_empresa.setAlignment(Qt.AlignRight)
-        contenedor_logo.addWidget(lbl_empresa)
-
         fila_pie.addLayout(contenedor_logo)
         layout.addLayout(fila_pie)
 

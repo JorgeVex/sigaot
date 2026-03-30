@@ -52,19 +52,36 @@ class VistaLogin(QWidget):
         panel.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
 
         layout_panel = QVBoxLayout(panel)
-        layout_panel.setContentsMargins(36, 36, 36, 36)
-        layout_panel.setSpacing(14)
+        layout_panel.setContentsMargins(0, 0, 0, 0)
+        layout_panel.setSpacing(0)
         layout_panel.setAlignment(Qt.AlignTop)
+
+        # Franja decorativa amarilla en la parte superior del panel
+        franja = QFrame()
+        franja.setObjectName("franja_login")
+        franja.setFixedHeight(6)
+        layout_panel.addWidget(franja)
+
+        # Contenido interno con padding
+        contenido_panel = QWidget()
+        contenido_panel.setStyleSheet("background: transparent;")
+        lyt_interno = QVBoxLayout(contenido_panel)
+        lyt_interno.setContentsMargins(36, 28, 36, 36)
+        lyt_interno.setSpacing(14)
+        lyt_interno.setAlignment(Qt.AlignTop)
+        layout_panel.addWidget(contenido_panel)
+        layout_panel = lyt_interno
 
         # Logo de la empresa
         lbl_logo = QLabel()
         lbl_logo.setAlignment(Qt.AlignCenter)
+        lbl_logo.setStyleSheet("background: transparent;")
         ruta_logo = os.path.join(
             os.path.dirname(__file__), "..", "recursos", "IMG", "Transalcaya.png"
         )
         if os.path.exists(ruta_logo):
             pix = QPixmap(ruta_logo).scaled(
-                140, 140,
+                150, 150,
                 Qt.KeepAspectRatio,
                 Qt.SmoothTransformation,
             )
@@ -74,17 +91,10 @@ class VistaLogin(QWidget):
             lbl_logo.setFont(QFont("Arial", 48))
         layout_panel.addWidget(lbl_logo)
 
-        # Título
-        lbl_titulo = QLabel("SIGAOT")
-        lbl_titulo.setAlignment(Qt.AlignCenter)
-        lbl_titulo.setFont(QFont("Segoe UI", 22, QFont.Bold))
-        lbl_titulo.setStyleSheet("color: #1E2027; letter-spacing: 2px;")
-        layout_panel.addWidget(lbl_titulo)
-
-        # Subtítulo
-        lbl_sub = QLabel("Trans-Alcayá")
+        # Subtítulo del sistema
+        lbl_sub = QLabel("Sistema de Gestión Trans-Alcayá")
         lbl_sub.setAlignment(Qt.AlignCenter)
-        lbl_sub.setStyleSheet("color: #6B7080; font-size: 13px;")
+        lbl_sub.setStyleSheet("color: #6B7080; font-size: 12px;")
         layout_panel.addWidget(lbl_sub)
 
         # Separador

@@ -343,7 +343,7 @@ class PanelDetalle(QFrame):
 
         self.lbl_badge_cumple = QLabel("🎂")
         self.lbl_badge_cumple.setFixedSize(26, 26); self.lbl_badge_cumple.setAlignment(Qt.AlignCenter)
-        self.lbl_badge_cumple.setStyleSheet("background-color:#FEBC3D;border-radius:13px;font-size:13px;")
+        self.lbl_badge_cumple.setStyleSheet("background-color:#FFFFFF;border-radius:13px;font-size:13px;")
         self.lbl_badge_cumple.setToolTip("¡Cumpleaños próximo!")
         self.lbl_badge_cumple.setVisible(False)
         fila_nombre.addWidget(self.lbl_badge_cumple)

@@ -102,12 +102,6 @@ class VentanaPrincipal(QMainWindow):
         lbl_logo.setObjectName("lbl_logo_sidebar")
         lbl_logo.setAlignment(Qt.AlignCenter)
         lbl_logo.setFixedSize(110, 110)
-        # Fondo circular amarillo corporativo para integrar el logo con el sidebar
-        lbl_logo.setStyleSheet("""
-            background-color: #FEBC3D;
-            border-radius: 55px;
-            padding: 6px;
-        """)
         ruta = os.path.join(
             os.path.dirname(__file__), "..", "recursos", "IMG", "Transalcaya.png"
         )
@@ -180,7 +174,7 @@ class VentanaPrincipal(QMainWindow):
         self._badge_personal.setFixedSize(22, 22)
         self._badge_personal.setVisible(False)
         self._badge_personal.setStyleSheet("""
-            background-color: #FEBC3D; color: #1A1C23;
+            background-color: #FFFFFF; color: #1A1C23;
             border-radius: 11px; font-size: 11px; font-weight: bold;
         """)
         lyt_per.addWidget(self._badge_personal)
